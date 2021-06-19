@@ -1,0 +1,43 @@
+version: "3.8"
+
+services:
+  dev:
+    container_name: nestjs_dev
+    image: joelgarciajr84/nestjs_dev:1.0.0
+    environment:
+      - NODE_ENV=dev
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:debug
+    ports:
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - nesjs-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+  prod:
+    container_name: nestjs_prod
+    image: joelgarciajr84/nestjs_prod:1.0.0
+    environment:
+      - NODE_ENV=production
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: npm run start:prod
+    ports:
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - nesjs-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: unless-stopped
+networks:
+  nesjs-network:
